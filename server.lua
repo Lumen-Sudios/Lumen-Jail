@@ -15,3 +15,5 @@ AddEventHandler("Lumen:UnjailPlayerServer", function(targetId)
         TriggerClientEvent("Lumen:UnjailPlayer", targetPlayer)
     end
 end)
+
+-- Author Of The Jail Script Goes to:  IOwxSpaceX
