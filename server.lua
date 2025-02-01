@@ -1,7 +1,7 @@
 -- Jail event handler
 local Webhook = {
     enabled = true,
-    url = "https://discord.com/api/webhooks/1334373183691821078/JG3DTVC1DTRIVyYRfn_btZV9AZ5dWo4DQdoQvHLNXIbpSi3rdlXydL4neP2woPvjV2zE",
+    url = "ADD WEBHOOK URL HERE",
     color = 16711680, -- Red
     title = "Jail System"
 }
