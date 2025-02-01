@@ -3,6 +3,7 @@ local EarlyRelease = false
 local JailCoords = vector3(1677.233, 2658.618, 45.216)
 local MaxDistance = 50.0 -- Maximum distance the player can wander from the jail center
 local TimeAddedForEscape = 60 -- Seconds added for escape attempts
+local HasAttemptedEscape = false -- New variable to track escape attempts
 
 RegisterNetEvent("Lumen:JailPlayer")
 AddEventHandler("Lumen:JailPlayer", function(jailtime)
@@ -14,6 +15,7 @@ AddEventHandler("Lumen:JailPlayer", function(jailtime)
             SetEntityCoords(playerPed, JailCoords)
             IsJailed = true
             EarlyRelease = false
+            HasAttemptedEscape = false -- Reset escape attempt flag
             
             while jailtime > 0 and not EarlyRelease do
                 playerPed = PlayerPedId()
@@ -33,20 +35,28 @@ AddEventHandler("Lumen:JailPlayer", function(jailtime)
                 end
                 
                 Citizen.Wait(500)
-                local playerLoc = GetEntityCoords(playerPed, true)
-                local distance = #(JailCoords - playerLoc)
                 
-                if distance > MaxDistance then
-                    SetEntityCoords(playerPed, JailCoords)
-                    jailtime = jailtime + TimeAddedForEscape
-                    if jailtime > 1500 then
-                        jailtime = 1500
+                -- Only check distance if not being released
+                if not EarlyRelease then
+                    local playerLoc = GetEntityCoords(playerPed, true)
+                    local distance = #(JailCoords - playerLoc)
+                    
+                    if distance > MaxDistance then
+                        SetEntityCoords(playerPed, JailCoords)
+                        jailtime = jailtime + TimeAddedForEscape
+                        if jailtime > 1500 then
+                            jailtime = 1500
+                        end
+                        if not HasAttemptedEscape then
+                            lib.notify({
+                                title = 'Escape Attempt',
+                                description = "Your jail time was extended by " .. TimeAddedForEscape .. " seconds because you tried to escape.",
+                                type = 'error'
+                            })
+                            TriggerServerEvent("Lumen:LogEscapeAttempt")
+                            HasAttemptedEscape = true
+                        end
                     end
-                    lib.notify({
-                        title = 'Escape Attempt',
-                        description = "Your jail time was extended by " .. TimeAddedForEscape .. " seconds because you tried to escape.",
-                        type = 'error'
-                    })
                 end
                 
                 jailtime = jailtime - 0.5
