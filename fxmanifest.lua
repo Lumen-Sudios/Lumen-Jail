@@ -1,7 +1,7 @@
 fx_version 'cerulean'
 game 'gta5'
-author 'Liam'
-description 'Liam\'s Jail System'
+author 'Lumen Sudios'
+description 'Lumen\s EasyAdmin Jail Plugin'
 
 shared_scripts {
     '@ox_lib/init.lua',
